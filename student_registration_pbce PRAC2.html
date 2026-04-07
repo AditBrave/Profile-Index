@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Registration – Priyadarshini Bhagwati College of Engineering</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .reg-card {
+      max-width: 820px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #e2e5ea;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    /* ── HEADER ── */
+    .header-band {
+      background: linear-gradient(135deg, #0a2342 0%, #1a4a7a 100%);
+      padding: 2rem 2.5rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-band::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .header-band::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: 80px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .school-badge {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 1.4rem;
+    }
+
+    .badge-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.2);
+      flex-shrink: 0;
+    }
+
+    .badge-icon svg { display: block; }
+
+    .school-info { flex: 1; }
+
+    .school-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+    }
+
+    .school-sub {
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    .naac-badge {
+      background: rgba(255,200,50,0.15);
+      border: 1px solid rgba(255,200,50,0.35);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 11px;
+      color: #ffd966;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .form-subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+
+    /* ── STEPS BAR ── */
+    .steps-bar {
+      display: flex;
+      padding: 0 2.5rem;
+      background: #071a30;
+      border-bottom: 1px solid #e2e5ea;
+      overflow-x: auto;
+    }
+
+    .step-tab {
+      padding: 0.85rem 1.1rem;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.38);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: color 0.2s;
+    }
+
+    .step-tab.active { color: #7eb3ff; border-bottom-color: #7eb3ff; }
+    .step-tab.done   { color: rgba(255,255,255,0.5); }
+
+    .step-num {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid currentColor;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+
+    .step-tab.done .step-num {
+      background: rgba(126,179,255,0.15);
+      border-color: rgba(126,179,255,0.5);
+      color: #7eb3ff;
+    }
+
+    /* ── FORM BODY ── */
+    .form-body { padding: 2rem 2.5rem; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #8a95a3;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e8ecf0;
+    }
+
+    .form-section { margin-bottom: 1.8rem; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    .full   { grid-column: 1 / -1; }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #4a5568;
+    }
+
+    label span.req { color: #e53e3e; margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    input[type="file"],
+    select,
+    textarea {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 9px 12px;
+      background: #f7f9fc;
+      border: 1px solid #dde3ec;
+      border-radius: 8px;
+      color: #1a202c;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+      background: #fff;
+    }
+
+    textarea { resize: vertical; min-height: 72px; }
+
+    /* ── AVATAR UPLOAD ── */
+    .avatar-upload {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f7f9fc;
+      border: 1.5px dashed #c8d5e8;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .avatar-circle {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: #0a2342;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 24px;
+    }
+
+    .upload-text strong { display: block; font-size: 13px; font-weight: 500; color: #1a202c; }
+    .upload-text span   { font-size: 11px; color: #8a95a3; }
+
+    .upload-btn {
+      margin-left: auto;
+      padding: 7px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      background: #fff;
+      border: 1px solid #dde3ec;
+      border-radius: 8px;
+      color: #4a5568;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .upload-btn:hover { background: #f0f4f8; }
+
+    /* ── RADIO PILLS ── */
+    .radio-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
+
+    .radio-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: #f7f9fc;
+      border: 1px solid #dde3ec;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #4a5568;
+      transition: all 0.15s;
+    }
+
+    .radio-pill input[type="radio"] { accent-color: #3b82f6; width: 14px; height: 14px; }
+    .radio-pill:hover { border-color: #3b82f6; color: #1a202c; }
+
+    /* ── CHECKBOXES ── */
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #f7f9fc;
+      border-radius: 8px;
+      border: 1px solid #e8ecf0;
+      cursor: pointer;
+      font-size: 13px;
+      color: #4a5568;
+      transition: all 0.15s;
+    }
+
+    .checkbox-item:hover { border-color: #3b82f6; color: #1a202c; }
+    .checkbox-item input[type="checkbox"] { accent-color: #3b82f6; width: 15px; height: 15px; }
+
+    /* ── NOTICE BOX ── */
+    .notice-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #3b5fa0;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .notice-box strong {
+      display: block;
+      color: #1d4ed8;
+      margin-bottom: 2px;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── DOCS LIST ── */
+    .docs-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 1.2rem;
+    }
+
+    .docs-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #4a5568;
+      padding: 8px 12px;
+      background: #f7f9fc;
+      border-radius: 8px;
+      border: 1px solid #e8ecf0;
+    }
+
+    .doc-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #3b82f6;
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    .form-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      border-top: 1px solid #e8ecf0;
+      background: #f7f9fc;
+    }
+
+    .progress-info { font-size: 12px; color: #8a95a3; }
+
+    .progress-bar-wrap {
+      height: 4px;
+      background: #e8ecf0;
+      border-radius: 99px;
+      margin-top: 5px;
+      width: 110px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+
+    .btn-row { display: flex; gap: 10px; }
+
+    .btn-prev {
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid #dde3ec;
+      border-radius: 8px;
+      background: #fff;
+      color: #4a5568;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .btn-prev:hover { background: #f0f4f8; }
+
+    .btn-next {
+      padding: 9px 22px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0a2342, #1a4a7a);
+      color: #fff;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s;
+    }
+
+    .btn-next:hover { opacity: 0.9; }
+    .btn-next:active { transform: scale(0.98); }
+
+    /* ── SUCCESS SCREEN ── */
+    .success-screen {
+      text-align: center;
+      padding: 3rem 2.5rem;
+    }
+
+    .success-icon {
+      width: 68px; height: 68px;
+      background: #eff6ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      border: 1px solid #bfdbfe;
+    }
+
+    .reg-id {
+      display: inline-block;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 8px 24px;
+      margin: 1rem 0;
+      font-family: 'DM Sans', monospace;
+    }
+
+    .next-steps-box {
+      background: #f7f9fc;
+      border-radius: 12px;
+      border: 1px solid #e8ecf0;
+      padding: 1.2rem 1.5rem;
+      text-align: left;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .next-steps-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #8a95a3;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .next-steps-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+    .next-steps-list li {
+      display: flex;
+      gap: 10px;
+      font-size: 13px;
+      color: #4a5568;
+      align-items: flex-start;
+    }
+
+    .ns-num {
+      color: #3b82f6;
+      font-weight: 500;
+      flex-shrink: 0;
+      min-width: 20px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .form-body, .form-footer { padding: 1.4rem 1.2rem; }
+      .header-band { padding: 1.4rem 1.2rem 1.2rem; }
+      .steps-bar { padding: 0 1rem; }
+      .school-name { font-size: 16px; }
+      .naac-badge { display: none; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .checkbox-group { grid-template-columns: 1fr; }
+      .step-tab { padding: 0.75rem 0.7rem; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="reg-card">
+
+  <!-- ══ HEADER ══ -->
+  <div class="header-band">
+    <div class="school-badge">
+      <div class="badge-icon">
+        <!-- Gear + Graduation Cap icon representing Engineering college -->
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 4L4 10l12 6 12-6-12-6z" fill="rgba(255,255,255,0.9)"/>
+          <path d="M4 16l12 6 12-6" stroke="rgba(255,255,255,0.55)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <path d="M4 22l12 6 12-6" stroke="rgba(255,255,255,0.25)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <circle cx="26" cy="10" r="2" fill="rgba(255,200,50,0.8)"/>
+        </svg>
+      </div>
+      <div class="school-info">
+        <div class="school-name">Priyadarshini Bhagwati College of Engineering</div>
+        <div class="school-sub">Nagpur, Maharashtra &nbsp;·&nbsp; Affiliated to RTMNU</div>
+      </div>
+      <div class="naac-badge">NAAC Accredited</div>
+    </div>
+    <div class="form-title">Student Registration Form</div>
+    <div class="form-subtitle">Academic Year 2025–26 &nbsp;·&nbsp; Undergraduate &amp; Postgraduate Programmes</div>
+  </div>
+
+  <!-- ══ STEP TABS ══ -->
+  <div class="steps-bar">
+    <div class="step-tab active" id="tab-1"><span class="step-num">1</span> Personal</div>
+    <div class="step-tab" id="tab-2"><span class="step-num">2</span> Academic</div>
+    <div class="step-tab" id="tab-3"><span class="step-num">3</span> Documents</div>
+    <div class="step-tab" id="tab-4"><span class="step-num">4</span> Confirm</div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STEP 1 — PERSONAL INFORMATION
+  ══════════════════════════════════════ -->
+  <div id="step-1" class="form-body">
+
+    <div class="form-section">
+      <div class="section-title">Profile Photo</div>
+      <div class="avatar-upload">
+        <div class="avatar-circle">🎓</div>
+        <div class="upload-text">
+          <strong>Upload your passport-size photo</strong>
+          <span>JPG or PNG · White background · Max 2 MB</span>
+        </div>
+        <button class="upload-btn" type="button" onclick="document.getElementById('photo-input').click()">Browse</button>
+        <input type="file" id="photo-input" accept=".jpg,.jpeg,.png" style="display:none" />
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Full Name</div>
+      <div class="grid-3">
+        <div class="field">
+          <label>First Name <span class="req">*</span></label>
+          <input type="text" id="fname" placeholder="e.g. Aryan" />
+        </div>
+        <div class="field">
+          <label>Middle Name</label>
+          <input type="text" placeholder="Optional" />
+        </div>
+        <div class="field">
+          <label>Last Name <span class="req">*</span></label>
+          <input type="text" id="lname" placeholder="e.g. Sharma" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Basic Information</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Date of Birth <span class="req">*</span></label>
+          <input type="date" />
+        </div>
+        <div class="field">
+          <label>Gender <span class="req">*</span></label>
+          <select>
+            <option value="">Select gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Non-binary</option>
+            <option>Prefer not to say</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Nationality <span class="req">*</span></label>
+          <input type="text" placeholder="e.g. Indian" value="Indian" />
+        </div>
+        <div class="field">
+          <label>Blood Group</label>
+          <select>
+            <option value="">Select</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>O+</option><option>O-</option>
+            <option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Aadhaar Number</label>
+          <input type="text" placeholder="XXXX XXXX XXXX" maxlength="14" />
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select>
+            <option value="">Select category</option>
+            <option>General</option>
+            <option>OBC</option>
+            <option>SC</option>
+            <option>ST</option>
+            <option>NT</option>
+            <option>EWS</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Contact Details</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" placeholder="student@example.com" />
+        </div>
+        <div class="field">
+          <label>Mobile Number <span class="req">*</span></label>
+          <input type="tel" placeholder="+91 XXXXX XXXXX" />
+        </div>
+        <div class="field">
+          <label>Parent / Guardian Name <span class="req">*</span></label>
+          <input type="text" placeholder="Father's / Mother's name" />
+        </div>
+        <div class="field">
+          <label>Parent Mobile Number</label>
+          <input type="tel" placeholder="+91 XXXXX XXXXX" />
+        </div>
+        <div class="field full">
+          <label>Permanent Address <span class="req">*</span></label>
+          <textarea placeholder="House no., street, village/city, taluka, district, state, PIN code"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /step-1 -->
+
+  <!-- ══════════════════════════════════════
+       STEP 2 — ACADEMIC INFORMATION
+  ══════════════════════════════════════ -->
+  <div id="step-2" class="form-body hidden">
+
+    <div class="form-section">
+      <div class="section-title">Programme Details</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Level of Study <span class="req">*</span></label>
+          <select>
+            <option value="">Select level</option>
+            <option>Undergraduate – B.E. (4 Years)</option>
+            <option>Postgraduate – M.E. / M.Tech (2 Years)</option>
+            <option>Diploma (Lateral Entry)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Branch / Department <span class="req">*</span></label>
+          <select>
+            <option value="">Select branch</option>
+            <option>Computer Science &amp; Engineering (CSE)</option>
+            <option>Information Technology (IT)</option>
+            <option>Electronics &amp; Communication Engg. (ECE)</option>
+            <option>Electrical Engineering (EE)</option>
+            <option>Mechanical Engineering (ME)</option>
+            <option>Civil Engineering (CE)</option>
+            <option>AIDS – Artificial Intelligence &amp; Data Science</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Academic Year / Intake</label>
+          <select>
+            <option>2025–26 (First Year)</option>
+            <option>2025–26 (Direct Second Year)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Mode of Admission</label>
+          <select>
+            <option>MHT-CET (State)</option>
+            <option>JEE Main</option>
+            <option>Management Quota</option>
+            <option>Lateral Entry</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>MHT-CET / JEE Roll No.</label>
+          <input type="text" placeholder="Entrance exam roll number" />
+        </div>
+        <div class="field">
+          <label>Entrance Score / Percentile</label>
+          <input type="text" placeholder="e.g. 92.5 percentile" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Specialisation / Elective Preference</div>
+      <div class="radio-row">
+        <label class="radio-pill"><input type="radio" name="spec" /> AI &amp; Machine Learning</label>
+        <label class="radio-pill"><input type="radio" name="spec" /> Cyber Security</label>
+        <label class="radio-pill"><input type="radio" name="spec" /> Data Science</label>
+        <label class="radio-pill"><input type="radio" name="spec" /> Internet of Things</label>
+        <label class="radio-pill"><input type="radio" name="spec" /> Cloud Computing</label>
+        <label class="radio-pill"><input type="radio" name="spec" /> VLSI Design</label>
+        <label class="radio-pill"><input type="radio" name="spec" /> Other</label>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Previous Education (10th)</div>
+      <div class="grid-3">
+        <div class="field">
+          <label>School Name <span class="req">*</span></label>
+          <input type="text" placeholder="School name" />
+        </div>
+        <div class="field">
+          <label>Board <span class="req">*</span></label>
+          <select>
+            <option value="">Select board</option>
+            <option>Maharashtra State Board (SSC)</option>
+            <option>CBSE</option>
+            <option>ICSE</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Year of Passing</label>
+          <input type="number" placeholder="e.g. 2022" min="2000" max="2025" />
+        </div>
+        <div class="field">
+          <label>Percentage / CGPA</label>
+          <input type="text" placeholder="e.g. 88%" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Previous Education (12th / Diploma)</div>
+      <div class="grid-3">
+        <div class="field">
+          <label>College / School Name <span class="req">*</span></label>
+          <input type="text" placeholder="College / school name" />
+        </div>
+        <div class="field">
+          <label>Board / University <span class="req">*</span></label>
+          <select>
+            <option value="">Select board</option>
+            <option>Maharashtra State Board (HSC)</option>
+            <option>MSBTE (Diploma)</option>
+            <option>CBSE</option>
+            <option>ICSE</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Year of Passing</label>
+          <input type="number" placeholder="e.g. 2024" min="2000" max="2025" />
+        </div>
+        <div class="field">
+          <label>Percentage / CGPA <span class="req">*</span></label>
+          <input type="text" placeholder="e.g. 75%" />
+        </div>
+        <div class="field">
+          <label>PCM / PCB Marks (%)</label>
+          <input type="text" placeholder="Physics + Chemistry + Maths %" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Extracurricular Interests</div>
+      <div class="checkbox-group">
+        <label class="checkbox-item"><input type="checkbox" /> Sports &amp; Athletics</label>
+        <label class="checkbox-item"><input type="checkbox" /> Music &amp; Arts</label>
+        <label class="checkbox-item"><input type="checkbox" /> Coding / Hackathons</label>
+        <label class="checkbox-item"><input type="checkbox" /> Drama &amp; Theatre</label>
+        <label class="checkbox-item"><input type="checkbox" /> Community Service / NSS</label>
+        <label class="checkbox-item"><input type="checkbox" /> Research &amp; Publications</label>
+        <label class="checkbox-item"><input type="checkbox" /> Robotics / IoT Club</label>
+        <label class="checkbox-item"><input type="checkbox" /> Cultural Events</label>
+      </div>
+    </div>
+
+  </div><!-- /step-2 -->
+
+  <!-- ══════════════════════════════════════
+       STEP 3 — DOCUMENTS
+  ══════════════════════════════════════ -->
+  <div id="step-3" class="form-body hidden">
+
+    <div class="notice-box">
+      <strong>Important Notice</strong>
+      Upload clear scanned copies or photographs of all documents (PDF / JPG / PNG). Each file must be under 5 MB. Blurred, incomplete or mismatched documents will delay your admission process at PBCE.
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Required Documents Checklist</div>
+      <ul class="docs-list">
+        <li><span class="doc-dot"></span> 10th (SSC) Mark Sheet</li>
+        <li><span class="doc-dot"></span> 12th (HSC) / Diploma Mark Sheet</li>
+        <li><span class="doc-dot"></span> MHT-CET / JEE Score Card</li>
+        <li><span class="doc-dot"></span> Transfer / Migration Certificate from previous institution</li>
+        <li><span class="doc-dot"></span> Caste / Category Certificate (if applicable)</li>
+        <li><span class="doc-dot"></span> Domicile Certificate (Maharashtra)</li>
+        <li><span class="doc-dot"></span> Aadhaar Card (Government-issued photo ID)</li>
+        <li><span class="doc-dot"></span> Passport-size photograph (JPG, white background, recent)</li>
+      </ul>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Upload Files</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>10th Mark Sheet <span class="req">*</span></label>
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="field">
+          <label>12th / Diploma Mark Sheet <span class="req">*</span></label>
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="field">
+          <label>MHT-CET / JEE Score Card <span class="req">*</span></label>
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="field">
+          <label>Transfer Certificate</label>
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="field">
+          <label>Caste Certificate (if applicable)</label>
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="field">
+          <label>Domicile Certificate <span class="req">*</span></label>
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="field">
+          <label>Aadhaar Card <span class="req">*</span></label>
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+        </div>
+        <div class="field">
+          <label>Passport-size Photo <span class="req">*</span></label>
+          <input type="file" accept=".jpg,.jpeg,.png" />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-title">Declaration</div>
+      <div class="checkbox-group" style="grid-template-columns: 1fr;">
+        <label class="checkbox-item" style="align-items: flex-start;">
+          <input type="checkbox" style="margin-top: 2px;" />
+          I hereby certify that all information provided in this form is true, correct and complete to the best of my knowledge. I understand that submission of false information may lead to cancellation of admission to Priyadarshini Bhagwati College of Engineering, Nagpur.
+        </label>
+        <label class="checkbox-item" style="align-items: flex-start;">
+          <input type="checkbox" style="margin-top: 2px;" />
+          I have read and agree to the college's terms, rules, conditions, and the Student Code of Conduct as prescribed by RTMNU / DTE Maharashtra.
+        </label>
+      </div>
+    </div>
+
+  </div><!-- /step-3 -->
+
+  <!-- ══════════════════════════════════════
+       STEP 4 — SUCCESS / CONFIRMATION
+  ══════════════════════════════════════ -->
+  <div id="step-4" class="form-body hidden">
+    <div class="success-screen">
+      <div class="success-icon">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <circle cx="15" cy="15" r="14" stroke="#3b82f6" stroke-width="1.5"/>
+          <path d="M8.5 15.5l4.5 4.5 9-9" stroke="#3b82f6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div style="font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 500; color: #0a2342; margin-bottom: 6px;">
+        Registration Submitted!
+      </div>
+      <div style="font-size: 14px; color: #6b7280; max-width: 380px; margin: 0 auto; line-height: 1.7;">
+        Welcome to <strong>Priyadarshini Bhagwati College of Engineering</strong>, Nagpur. Your application has been received and is under review by the Admissions Office.
+      </div>
+
+      <div class="reg-id" id="reg-id-display">PBCE-2025-0000</div>
+
+      <div style="font-size: 12px; color: #9ca3af; margin-bottom: 1.5rem;">
+        Keep this Registration ID for all future correspondence with the Admissions Office.
+      </div>
+
+      <div class="next-steps-box">
+        <div class="next-steps-title">What happens next?</div>
+        <ul class="next-steps-list">
+          <li><span class="ns-num">01</span> Check your registered email for a confirmation link within 24 hours.</li>
+          <li><span class="ns-num">02</span> Verify your uploaded documents via the PBCE Student Portal.</li>
+          <li><span class="ns-num">03</span> Pay the registration fee online to confirm your seat.</li>
+          <li><span class="ns-num">04</span> Report to the college on the allotted date with original documents.</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 1.5rem; font-size: 12.5px; color: #6b7280;">
+        For queries: <a href="mailto:admissions@pbce.edu.in" style="color: #3b82f6;">admissions@pbce.edu.in</a>
+        &nbsp;|&nbsp; +91 712-XXXXXXX
+      </div>
+    </div>
+  </div><!-- /step-4 -->
+
+  <!-- ══ FOOTER ══ -->
+  <div class="form-footer">
+    <div class="progress-info">
+      <span id="progress-label">Step 1 of 4</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="prog-fill" style="width: 25%;"></div>
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-prev" id="btn-back" type="button" style="display:none">← Back</button>
+      <button class="btn-next" id="btn-next" type="button">Continue →</button>
+    </div>
+  </div>
+
+</div><!-- /reg-card -->
+
+<script>
+  var step = 1;
+  var total = 4;
+
+  function randId() {
+    return 'PBCE-2025-' + String(Math.floor(Math.random() * 9000) + 1000);
+  }
+
+  function goTo(n) {
+    document.getElementById('step-' + step).classList.add('hidden');
+    var oldTab = document.getElementById('tab-' + step);
+    oldTab.classList.remove('active');
+    if (n > step) oldTab.classList.add('done');
+
+    step = n;
+
+    var newStep = document.getElementById('step-' + step);
+    if (newStep) newStep.classList.remove('hidden');
+
+    var newTab = document.getElementById('tab-' + step);
+    if (newTab) { newTab.classList.add('active'); newTab.classList.remove('done'); }
+
+    document.getElementById('progress-label').textContent = 'Step ' + step + ' of ' + total;
+    document.getElementById('prog-fill').style.width = (step / total * 100) + '%';
+
+    var backBtn = document.getElementById('btn-back');
+    var nextBtn = document.getElementById('btn-next');
+    backBtn.style.display = step > 1 ? 'inline-block' : 'none';
+
+    if (step === total) {
+      nextBtn.textContent = 'Submit Application';
+    } else {
+      nextBtn.textContent = 'Continue →';
+    }
+  }
+
+  document.getElementById('btn-next').addEventListener('click', function () {
+    if (step < total) {
+      goTo(step + 1);
+    } else {
+      document.getElementById('reg-id-display').textContent = randId();
+      goTo(total);
+      this.style.display = 'none';
+      document.getElementById('btn-back').style.display = 'none';
+      document.getElementById('progress-label').textContent = 'Application submitted ✓';
+      document.getElementById('prog-fill').style.width = '100%';
+    }
+  });
+
+  document.getElementById('btn-back').addEventListener('click', function () {
+    if (step > 1) goTo(step - 1);
+  });
+
+  for (var i = 1; i <= total; i++) {
+    (function (idx) {
+      var t = document.getElementById('tab-' + idx);
+      if (t) {
+        t.addEventListener('click', function () {
+          if (idx < step) goTo(idx);
+        });
+      }
+    })(i);
+  }
+</script>
+
+</body>
+</html>
